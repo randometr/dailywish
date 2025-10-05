@@ -280,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Инициализируем контракт
 
-Solom Bobo, [06.10.2025 2:21]
 contract = new ethers.Contract(contractAddress, contractABI, signer);
             
         } catch (error) {
@@ -393,7 +392,6 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
             wishForm.classList.add('hidden');
             charCount.textContent = "0";
 
-Solom Bobo, [06.10.2025 2:21]
 // Обновляем время последнего действия
             lastActionTime = Date.now();
             
