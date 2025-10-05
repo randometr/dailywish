@@ -1,0 +1,198 @@
+/* ===== ОСНОВНЫЕ СТИЛИ САЙТА ===== */
+
+/* Цветовая схема приложения */
+:root {
+    --primary: #4a6fa5;    /* Основной синий цвет */
+    --secondary: #6b8cbc;  /* Вторичный синий */
+    --accent: #ff6b6b;     /* Акцентный цвет для кнопок и важных элементов */
+    --light: #f8f9fa;      /* Светлый фон */
+    --dark: #343a40;       /* Тёмный текст */
+    --success: #28a745;    /* Цвет успешных действий */
+}
+
+/* Сброс стандартных стилей и базовые настройки */
+* {
+    box-sizing: border-box; /* Учитываем padding и border в размерах */
+    margin: 0;
+    padding: 0;
+}
+
+/* Стили для всего тела страницы */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark);
+    background-color: #f0f4f8; /* Фоновый цвет страницы */
+    padding: 20px;
+}
+
+/* Основной контейнер контента */
+.container {
+    max-width: 600px;      /* Максимальная ширина контента */
+    margin: 0 auto;        /* Центрирование по горизонтали */
+    padding: 20px;
+    background: white;     /* Фон контейнера */
+    border-radius: 10px;   /* Скругление углов */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень контейнера */
+}
+
+/* Стили для шапки сайта */
+header {
+    text-align: center;    /* Центрирование текста */
+    margin-bottom: 30px;   /* Отступ снизу */
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee; /* Разделительная линия */
+}
+
+/* Заголовок в шапке */
+header h1 {
+    color: var(--primary);
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+}
+
+/* Стили для всех секций */
+.section {
+    margin-bottom: 20px;   /* Отступ между секциями */
+    padding: 20px;
+    border-radius: 8px;
+    background: var(--light);
+    transition: all 0.3s ease; /* Плавные анимации */
+}
+
+/* Класс для скрытия элементов */
+.hidden {
+    display: none;
+}
+
+/* Общие стили для кнопок */
+button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Стили при наведении на кнопку */
+button:hover {
+    background-color: var(--secondary);
+    transform: translateY(-2px); /* Эффект "поднятия" */
+}
+
+/* Стили для отключенной кнопки */
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Стили для карточки пожелания */
+.wish-card {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-left: 4px solid var(--accent); /* Акцентная полоса слева */
+}
+
+/* Текст пожелания */
+.wish-text {
+    font-size: 18px;
+    font-style: italic;
+    margin-bottom: 10px;
+    color: var(--primary);
+    line-height: 1.8;
+}
+
+/* Автор пожелания */
+.wish-author {
+    font-size: 14px;
+    color: var(--secondary);
+    font-weight: 500;
+}
+
+/* Стили для группы полей формы */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Стили для меток */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+/* Стили для полей ввода */
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+/* Стили при фокусе на поле */
+input:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.25);
+}
+
+/* Специфические стили для текстовой области */
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Счетчик символов */
+.char-counter {
+    text-align: right;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Секция с информацией */
+.info-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-top: 2px solid var(--primary);
+}
+
+.info-section h2 {
+    margin-bottom: 15px;
+    color: var(--primary);
+}
+
+.info-section ol {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.info-section li {
+    margin-bottom: 8px;
+}
+
+/* Анимация появления элементов */
+
+Solom Bobo, [06.10.2025 0:06]
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section:not(.hidden) {
+    animation: fadeIn 0.5s ease forwards;
+}

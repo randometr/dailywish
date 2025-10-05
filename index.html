@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyWish - Пожелания на каждый день</title>
+    <link rel="stylesheet" href="style.css"> <!-- Подключаем файл стилей -->
+</head>
+<body>
+    <!-- Основной контейнер для всего контента -->
+    <div class="container">
+        <!-- Шапка сайта с названием и описанием -->
+        <header>
+            <h1>DailyWish</h1>
+            <p>Получите пожелание на день и добавьте своё!</p>
+        </header>
+
+        <!-- Секция подключения кошелька -->
+        <div id="wallet-section" class="section">
+            <button id="connect-wallet">Подключить кошелёк</button>
+            <p id="network-alert" class="hidden">Пожалуйста, переключитесь на сеть Base</p>
+        </div>
+
+        <!-- Секция получения пожелания (изначально скрыта) -->
+        <div id="get-wish-section" class="section hidden">
+            <button id="get-wish">Получить пожелание (только gas)</button>
+        </div>
+
+        <!-- Секция отображения полученного пожелания -->
+        <div id="wish-result" class="section hidden">
+            <div class="wish-card">
+                <p class="wish-text">Ваше пожелание появится здесь</p>
+                <p class="wish-author">Автор</p>
+            </div>
+        </div>
+
+        <!-- Секция добавления пожелания -->
+        <div id="add-wish-section" class="section hidden">
+            <button id="add-wish-btn">Добавить пожелание</button>
+            <form id="wish-form" class="hidden">
+                <div class="form-group">
+                    <label for="twitter-handle">Ваш Twitter (необязательно):</label>
+                    <input type="text" id="twitter-handle" placeholder="@username">
+                </div>
+                <div class="form-group">
+                    <label for="wish-text">Ваше пожелание:</label>
+                    <textarea id="wish-text" rows="4" placeholder="Напишите позитивное пожелание..." maxlength="280"></textarea>
+                    <div class="char-counter"><span id="char-count">0</span>/280 символов</div>
+                </div>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+
+        <!-- Секция информации о проекте -->
+        <div class="info-section">
+            <h2>Как это работает?</h2>
+            <ol>
+                <li>Подключите кошелёк (MetaMask или другой)</li>
+                <li>Получите случайное пожелание (оплата только за газ)</li>
+                <li>Добавьте своё пожелание в коллекцию</li>
+                <li>Каждый может получать и добавлять пожелания 1 раз в день</li>
+            </ol>
+            <p>Все пожелания хранятся в блокчейне Base и доступны всем пользователям</p>
+        </div>
+    </div>
+
+    <!-- Подключаем библиотеку ethers для работы с блокчейном -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <!-- Подключаем основной скрипт приложения -->
+    <script src="app.js"></script>
+</body>
+</html>
