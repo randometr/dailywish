@@ -299,7 +299,6 @@ async function updateBalance() {
 // === Обновление состояния кнопок ===
 async function updateButtonStates() {
 	if (!contract || !userAddress) return;
-	try {
 		const lastAction = await contract.lastActionTime(userAddress);
         lastActionTime = Number(lastAction); // timestamp из смарт-контракта
         const currentTime = Math.floor(Date.now() / 1000);
@@ -317,11 +316,11 @@ async function updateButtonStates() {
 	        getBtn.disabled = false;
 	        addBtn.disabled = false;
 	        document.getElementById('timer-section').classList.add('hidden');
-	    } catch (err) {
-			alert('Ошибка получения lastActionTime:', err);
-    	}
-	}
-}
+	    } 
+	 // catch (err) {
+	//		alert('Ошибка получения lastActionTime:', err);
+    //	} -->
+		}
 
 // === Запуск таймера ===
 function startTimer(seconds) {
@@ -455,6 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
