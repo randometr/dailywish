@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const charCount = document.getElementById('char-count');
 	const timerSection = document.getElementById('timer-section');
 	const timerElement = document.getElementById('timer');
+	let timerInterval = null;
 
     
     // ===== НАСТРОЙКИ ПРИЛОЖЕНИЯ =====
@@ -318,14 +319,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Инициализируем провайдер и подписывающего
             //provider = new ethers.providers.Web3Provider(window.ethereum);
 			//provider = new ethers.BrowserProvider(web3Provider);
-            signer = provider.getSigner();
+            signer = await provider.getSigner();
             
             // Проверяем сеть
             await checkNetwork();
             
             // Инициализируем контракт
-
 			contract = new ethers.Contract(contractAddress, contractABI, signer);
+			
+			// Получаем время последнего действия и обновляем состояние кнопок
 			lastActionTime = await contract.lastActionTime(userAddress);
     		updateButtonStates();
             
@@ -385,26 +387,22 @@ document.addEventListener('DOMContentLoaded', () => {
        // networkCorrect = network.chainId === parseInt(baseChainId, 16);
         
         if (networkCorrect) {
-            getWishSection.classList.remove('hidden');
             networkAlert.classList.add('hidden');
         } else {
             networkAlert.classList.remove('hidden');
-            getWishSection.classList.add('hidden');
+			getWishBtn.disabled = true;
+			addWishBtn.disabled = true;
         }
     }
     
     // Функция получения случайного пожелания
     async function getRandomWish() {
-        try {
-            // Проверяем возможность выполнения действия
-            if (!canPerformAction()) {
-                alert("Вы можете получать только одно пожелание в день!");
-                return;
-            }
-            
+        try {            
+			
             // Показываем индикатор загрузки
             getWishBtn.textContent = "Загрузка...";
             getWishBtn.disabled = true;
+			addWishBtn.disabled = true;
             
             // Вызываем функцию контракта
             const wishTextFromContract = await contract.getRandomWish();
@@ -421,11 +419,12 @@ document.addEventListener('DOMContentLoaded', () => {
             addWishSection.classList.remove('hidden');
             
             // Обновляем время последнего действия
-            lastActionTime = Date.now();
+            //lastActionTime = Date.now();
+			lastActionTime = Math.floor(Date.now() / 1000);
+			startTimer(24 * 60 * 60);
             
             // Восстанавливаем кнопку
             getWishBtn.textContent = "Получить пожелание (только gas)";
-            getWishBtn.disabled = false;
             
         } catch (error) {
             console.error("Ошибка получения пожелания:", error);
@@ -453,12 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Пожелание слишком длинное (максимум 280 символов)");
                 return;
             }
-            
-            if (!canPerformAction()) {
-                alert("Вы можете добавлять только одно пожелание в день!");
-                return;
-            }
-            
+                        
             // Показываем индикатор загрузки
             const submitBtn = wishForm.querySelector('button[type="submit"]');
             submitBtn.textContent = "Отправка...";
@@ -467,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Вызываем функцию контракта
             if (contractAddress) {
                 const tx = await contract.addWish(
-                    twitterHandle || "Аноним", 
+                    twitterHandle || "Base Anonym", 
                     text
                 );
                 
@@ -483,8 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
             wishForm.classList.add('hidden');
             charCount.textContent = "0";
 
-// Обновляем время последнего действия
-            lastActionTime = Date.now();
+			// Обновляем время последнего действия
+            lastActionTime = Math.floor(Date.now() / 1000);
+			startTimer(24 * 60 * 60); 
             
             // Восстанавливаем кнопку
             submitBtn.textContent = "Отправить";
@@ -496,20 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const submitBtn = wishForm.querySelector('button[type="submit"]');
             submitBtn.textContent = "Отправить";
-            submitBtn.disabled = false;
+            submitBtn.disabled = true;
         }
     }
     
     // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
-    
-    // Проверка возможности выполнения действия (1 раз в день)
-    function canPerformAction() {
-        if (lastActionTime === 0) return true;
-        const hoursPassed = (Date.now() - lastActionTime) / (1000 * 60 * 60);
-        return hoursPassed >= 24;
-		//return true;
-    }
-    
+	
     // Сокращение адреса кошелька для отображения
     function shortenAddress(address) {
         if (!address) return "";
@@ -538,6 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
 
 
 
