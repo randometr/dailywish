@@ -324,8 +324,8 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
                 : initialWishes[Math.floor(Math.random() * initialWishes.length)];
             
             // Обновляем UI
-            wishText.textContent = "${wish.text}";
-            wishAuthor.textContent = wish.author ? - wish.author : "";
+            wishText.textContent = `${wish.text}`;
+            wishAuthor.textContent = wish.author ? `- ${wish.author}` : "";
             wishResult.classList.remove('hidden');
             addWishSection.classList.remove('hidden');
             
@@ -446,6 +446,7 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
         });
     }
 });
+
 
 
 
