@@ -298,19 +298,30 @@ async function updateBalance() {
 
 // === Обновление состояния кнопок ===
 async function updateButtonStates() {
-    const currentTime = Math.floor(Date.now() / 1000);
-    const timeSinceLastAction = currentTime - lastActionTime;
-    const cooldownPeriod = 24 * 60 * 60;
+	if (!contract || !userAddress) return;
+	try {
+		const lastAction = await contract.lastActionTime(userAddress);
+        lastActionTime = Number(lastAction); // timestamp из смарт-контракта
+        const currentTime = Math.floor(Date.now() / 1000);
+        const timeSinceLastAction = currentTime - lastActionTime;
+        const cooldownPeriod = 24 * 60 * 60;
 
-    if (timeSinceLastAction < cooldownPeriod) {
-        document.getElementById('get-wish').disabled = true;
-        document.getElementById('add-wish').disabled = true;
-        startTimer(cooldownPeriod - timeSinceLastAction);
-    } else {
-        document.getElementById('get-wish').disabled = false;
-        document.getElementById('add-wish').disabled = false;
-        document.getElementById('timer-section').classList.add('hidden');
+		const getBtn = document.getElementById('get-wish');
+    	const addBtn = document.getElementById('add-wish');
+
+	    if (timeSinceLastAction < cooldownPeriod) {
+			getBtn.disabled = true;
+	        addBtn.disabled = true;
+	        startTimer(cooldownPeriod - timeSinceLastAction);
+	    } else {
+	        getBtn.disabled = false;
+	        addBtn.disabled = false;
+	        document.getElementById('timer-section').classList.add('hidden');
+	    }
+		catch (err) {
+			alert('Ошибка получения lastActionTime:', err);
     }
+	}
 }
 
 // === Запуск таймера ===
@@ -350,6 +361,7 @@ async function getRandomWish() {
 
         lastActionTime = Math.floor(Date.now() / 1000);
         startTimer(24 * 60 * 60);
+		localStorage.setItem("lastActionTime", lastActionTime);
     } catch (error) {
         alert(`Ошибка: ${error.message}`);
     } finally {
@@ -366,6 +378,7 @@ async function addWish() {
         alert("Пожелание добавлено!");
         lastActionTime = Math.floor(Date.now() / 1000);
         startTimer(24 * 60 * 60);
+		localStorage.setItem("lastActionTime", lastActionTime);
     } catch (error) {
         alert(`Ошибка: ${error.message}`);
     } finally {
@@ -443,4 +456,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
