@@ -421,7 +421,7 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
     // Сокращение адреса кошелька для отображения
     function shortenAddress(address) {
         if (!address) return "";
-        return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+        return `${address.substring(0, 6)} ... ${address.substring(address.length - 4)}`;
     }
     
     // Обработчик изменения сети
@@ -446,6 +446,7 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
         });
     }
 });
+
 
 
 
