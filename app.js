@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             walletConnected = true;
             
             // Обновляем UI
-            connectWalletBtn.textContent = Кошелёк: ${shortenAddress(userAddress)};
+            connectWalletBtn.textContent = "Кошелёк:" ${shortenAddress(userAddress)};
             connectWalletBtn.disabled = true;
             
             // Инициализируем провайдер и подписывающего
@@ -446,3 +446,4 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
         });
     }
 });
+
