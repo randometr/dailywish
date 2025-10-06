@@ -413,9 +413,10 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
     
     // Проверка возможности выполнения действия (1 раз в день)
     function canPerformAction() {
-        if (lastActionTime === 0) return true;
-        const hoursPassed = (Date.now() - lastActionTime) / (1000 * 60 * 60);
-        return hoursPassed >= 24;
+        //if (lastActionTime === 0) return true;
+        //const hoursPassed = (Date.now() - lastActionTime) / (1000 * 60 * 60);
+        //return hoursPassed >= 24;
+		return true;
     }
     
     // Сокращение адреса кошелька для отображения
@@ -446,6 +447,7 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
         });
     }
 });
+
 
 
 
