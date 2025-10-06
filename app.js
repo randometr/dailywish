@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         		alert("Установите Web3-кошелек (MetaMask, OKX и т.д.)!");
         		return;
    			 }
-            provider = new ethers.BrowserProvider(web3Provider);
+            provider = new ethers.providers.BrowserProvider(web3Provider);
             // Запрашиваем доступ к аккаунтам
 			const accounts = await provider.send('eth_requestAccounts', []);
        		userAddress = accounts[0];
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Инициализируем провайдер и подписывающего
             //provider = new ethers.providers.Web3Provider(window.ethereum);
 			//provider = new ethers.BrowserProvider(web3Provider);
-            signer = await provider.getSigner();
+            signer = provider.getSigner();
             
             // Проверяем сеть
             await checkNetwork();
@@ -525,6 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
 
 
 
