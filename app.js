@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const twitterHandleInput = document.getElementById('twitter-handle');
     const wishTextInput = document.getElementById('wish-text');
     const charCount = document.getElementById('char-count');
+	const timerSection = document.getElementById('timer-section');
+	const timerElement = document.getElementById('timer');
+
     
     // ===== НАСТРОЙКИ ПРИЛОЖЕНИЯ =====
     // Адрес и ABI контракта (заполнить после деплоя)
@@ -238,60 +241,148 @@ document.addEventListener('DOMContentLoaded', () => {
     connectWalletBtn.addEventListener('click', connectWallet);
     
     // Получение пожелания
-    getWishBtn.addEventListener('click', getRandomWish);
-    
+    //getWishBtn.addEventListener('click', getRandomWish);
+	getWishBtn.addEventListener('click', async () => {
+    try {
+		getRandomWish();
+        getWishBtn.disabled = true;
+        addWishBtn.disabled = true;
+               
+        // После получения пожелания:
+        lastActionTime = Math.floor(Date.now() / 1000);
+        startTimer(24 * 60 * 60);
+        
+    } catch (error) {
+        // ... обработка ошибок ...
+    }
+});
+		
     // Открытие формы добавления
-    addWishBtn.addEventListener('click', () => {
-        wishForm.classList.remove('hidden');
-    });
+	addWishBtn.addEventListener('click', async () => {
+    try {
+		wishForm.classList.remove('hidden');
+        getWishBtn.disabled = true;
+        addWishBtn.disabled = true;
+              
+        // После успешного добавления:
+        lastActionTime = Math.floor(Date.now() / 1000);
+        startTimer(24 * 60 * 60);
+        
+    } catch (error) {
+        // ... обработка ошибок ...
+    }
+});
     
     // Отправка формы
     wishForm.addEventListener('submit', addNewWish);
     
     // ===== ОСНОВНЫЕ ФУНКЦИИ =====
-    
+
+	// Глобальная функция для получения провайдера
+	function getWeb3Provider() {
+	    // 1. Проверка на наличие OKX Wallet
+	    if (window.okxwallet) {
+	        return window.okxwallet;
+	    }
+	    // 2. Проверка на наличие MetaMask (или других, которые используют window.ethereum)
+	    if (window.ethereum) {
+	        return window.ethereum;
+	    }
+	    // 3. Проверка на наличие других провайдеров (например, Trust Wallet)
+	    if (window.web3 && window.web3.currentProvider) {
+	        return window.web3.currentProvider;
+	    }
+	    
+	    return null; // Провайдер не найден
+	}
+	
     // Функция подключения кошелька
     async function connectWallet() {
+		const web3Provider = getWeb3Provider();
         try {
-            // Проверяем наличие Ethereum провайдера
-            if (!window.ethereum) {
-                alert("Установите MetaMask или другой Ethereum-кошелек!");
-                return;
-            }
-            
+            // Проверяем наличие провайдера
+			if (!web3Provider) {
+        		alert("Установите Web3-кошелек (MetaMask, OKX и т.д.)!");
+        		return;
+   			 }
+            provider = new ethers.BrowserProvider(web3Provider);
             // Запрашиваем доступ к аккаунтам
-            const accounts = await window.ethereum.request({ 
-                method: 'eth_requestAccounts' 
-            });
-            
-            userAddress = accounts[0];
-            walletConnected = true;
+			const accounts = await provider.send('eth_requestAccounts', []);
+       		userAddress = accounts[0];
+        	walletConnected = true;
             
             // Обновляем UI
             connectWalletBtn.textContent = `Кошелёк: ${shortenAddress(userAddress)}`;
             connectWalletBtn.disabled = true;
             
             // Инициализируем провайдер и подписывающего
-            provider = new ethers.providers.Web3Provider(window.ethereum);
+            //provider = new ethers.providers.Web3Provider(window.ethereum);
+			//provider = new ethers.BrowserProvider(web3Provider);
             signer = provider.getSigner();
             
             // Проверяем сеть
-            checkNetwork();
+            await checkNetwork();
             
             // Инициализируем контракт
 
-contract = new ethers.Contract(contractAddress, contractABI, signer);
+			contract = new ethers.Contract(contractAddress, contractABI, signer);
+			lastActionTime = await contract.lastActionTime(userAddress);
+    		updateButtonStates();
             
         } catch (error) {
             console.error("Ошибка подключения кошелька:", error);
             alert(`Ошибка подключения: ${error.message}`);
         }
     }
+
+	// Функция обновления состояния кнопок
+	function updateButtonStates() {
+   		const currentTime = Math.floor(Date.now() / 1000);
+    	const timeSinceLastAction = currentTime - lastActionTime;
+    	const cooldownPeriod = 24 * 60 * 60; // 24 часа в секундах
     
+    	if (timeSinceLastAction < cooldownPeriod) {
+        // Действие недоступно
+        	getWishBtn.disabled = true;
+        	addWishBtn.disabled = true;
+        	startTimer(cooldownPeriod - timeSinceLastAction);
+    	} else {
+        // Действие доступно
+        	getWishBtn.disabled = false;
+        	addWishBtn.disabled = false;
+        	timerSection.classList.add('hidden');
+    	}
+	}
+
+	// Функция запуска таймера
+	function startTimer(seconds) {
+    	timerSection.classList.remove('hidden');
+    	clearInterval(timerInterval);
+    	let remaining = seconds;
+    	timerInterval = setInterval(() => {
+        	remaining--;
+		if (remaining <= 0) {
+			clearInterval(timerInterval);
+            updateButtonStates();
+            return;
+        }
+        
+        // Форматирование времени
+        const hours = Math.floor(remaining / 3600);
+        const minutes = Math.floor((remaining % 3600) / 60);
+        const secs = remaining % 60;
+        
+        timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        timerElement.classList.add('pulse');
+		}, 1000);
+	}
+	
     // Функция проверки сети
     async function checkNetwork() {
-        const network = await provider.getNetwork();
-        networkCorrect = network.chainId === parseInt(baseChainId, 16);
+		const chainId = await provider.send('eth_chainId', []);
+		networkCorrect = chainId === baseChainId;
+       // const network = await provider.getNetwork();
+       // networkCorrect = network.chainId === parseInt(baseChainId, 16);
         
         if (networkCorrect) {
             getWishSection.classList.remove('hidden');
@@ -447,6 +538,7 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
         });
     }
 });
+
 
 
 
