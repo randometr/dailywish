@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyWish - Пожелания на каждый день</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <header>
+            <h1>DailyWish</h1>
+            <p>Получите пожелание на день и добавьте своё!</p>
+        </header>
+
+        <!-- Секция подключения кошелька -->
+        <div id="wallet-section" class="section">
+            <button id="connect-wallet">Подключить кошелёк</button>
+            <p id="network-alert" class="hidden">Пожалуйста, переключитесь на сеть Base</p>
+        </div>
+
+        <!-- Секция действий -->
+        <div id="actions-section" class="section hidden">
+            <button id="get-wish">Получить пожелание</button>
+            <button id="add-wish">Добавить пожелание</button>
+            <button id="view-received">Просмотреть полученные</button>
+            <button id="view-added">Просмотреть добавленные</button>
+        </div>
+
+        <!-- Секция результата -->
+        <div id="result-section" class="section hidden">
+            <div class="wish-card">
+                <p class="wish-text">Ваше пожелание появится здесь</p>
+                <p class="wish-author">Автор</p>
+            </div>
+        </div>
+
+        <!-- Секция баланса -->
+        <div id="balance-section" class="section hidden">
+            <p>Баланс: <span id="balance">0 ETH</span></p>
+        </div>
+
+        <!-- Секция таймера -->
+        <div id="timer-section" class="section hidden">
+            <p>Следующее действие доступно через: <span id="timer">24:00:00</span></p>
+        </div>
+
+        <!-- Модальные окна -->
+        <div id="modal-received" class="modal hidden">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal-received')">&times;</span>
+                <h2>Полученные пожелания</h2>
+                <ul id="received-list"></ul>
+            </div>
+        </div>
+
+        <div id="modal-added" class="modal hidden">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal-added')">&times;</span>
+                <h2>Добавленные пожелания</h2>
+                <ul id="addedlist"></ul>
+            </div>
+        </div>
+
+        <!-- Подключение библиотек -->
+        <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.min.js"></script>
+        <script src="app.js"></script>
+    </div>
+</body>
+</html>
