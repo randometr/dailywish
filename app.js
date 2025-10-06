@@ -317,9 +317,9 @@ async function updateButtonStates() {
 	        addBtn.disabled = false;
 	        document.getElementById('timer-section').classList.add('hidden');
 	    } 
-	 // catch (err) {
-	//		alert('Ошибка получения lastActionTime:', err);
-    //	} -->
+ // catch (err) {
+//		alert('Ошибка получения lastActionTime:', err);
+//	} -->
 		}
 
 // === Запуск таймера ===
@@ -454,6 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
