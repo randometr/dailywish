@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             walletConnected = true;
             
             // Обновляем UI
-            connectWalletBtn.textContent = `Кошелёк: ${shortenAddress(userAddress)}`;
+            connectWalletBtn.textContent = "Кошелёк: ${shortenAddress(userAddress)}";
             connectWalletBtn.disabled = true;
             
             // Инициализируем провайдер и подписывающего
@@ -433,7 +433,7 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
         window.ethereum.on('accountsChanged', (accounts) => {
             if (accounts.length > 0) {
                 userAddress = accounts[0];
-                connectWalletBtn.textContent = Кошелёк: ${shortenAddress(userAddress)};
+                connectWalletBtn.textContent = "Кошелёк: ${shortenAddress(userAddress)}";
             } else {
                 // Пользователь отключил кошелек
                 walletConnected = false;
@@ -446,5 +446,6 @@ contract = new ethers.Contract(contractAddress, contractABI, signer);
         });
     }
 });
+
 
 
