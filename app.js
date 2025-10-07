@@ -393,7 +393,8 @@ async function viewAllWishes() {
 
 	try {
 		// 1. Получаем общее количество пожеланий
-		const count = await contract.getWishesCount();
+		const countBigInt = await contract.getWishesCount();
+		const count = Number(countBigInt);
 		console.log("Общее количество пожеланий:", count);
 		
 		if (count === 0) {
@@ -495,6 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
