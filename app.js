@@ -403,21 +403,39 @@ async function viewAllWishes() {
 		}
 		
 		list.innerHTML = ""; // Очищаем "Загрузка..."
+		const promises = [];
 
 		// 2. В цикле получаем каждое пожелание по ID
 		for (let i = 0; i < count; i++) {
 			//console.log("Попытка получить пожелание с ID:", i);
 			// Предполагаем, что getWish возвращает (author, text, timestamp)
 			//try {
-				const [author, text, timestamp] = await contract.getWish(i);
+			promises.push(contract.getWish(i));
 			
+			//const [author, text, timestamp] = await contract.getWish(i);
+		
 			const li = document.createElement('li');
 			li.textContent = `[ID: ${i}] ${text} — ${author}`;
 			list.appendChild(li);
 			//} catch (error) {
 			//	console.error("Ошибка при ID:", i, error);
 			}
-		}
+		const allWishesData = await Promise.all(promises);
+		allWishesData.forEach((wishData, i) => {
+            // wishData - это массив [author, text, timestamp]
+            const [author, text, timestamp] = wishData;
+			const li = document.createElement('li');
+			// Проверяем, что текст пожелания не пустой
+            if (text && text.length > 0) {
+				li.textContent = `[ID: ${i}] ${text} — ${author}`;
+                list.appendChild(li);
+            } else {
+                // Если пожелание пустое, можно добавить заглушку
+                li.textContent = `[ID: ${i}] (Пустое пожелание)`;
+                list.appendChild(li);
+            }
+        });
+	  
 	} catch (error) {
 		console.error("Ошибка загрузки всех пожеланий:", error);
 		list.innerHTML = "<li>Ошибка загрузки данных из контракта. Проверьте консоль.</li>";
@@ -496,6 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
