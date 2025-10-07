@@ -24,9 +24,10 @@
         <div id="actions-section" class="section hidden">
             <button id="get-wish">Получить пожелание</button>
             <button id="add-wish">Добавить пожелание</button>
+            <button id="view-all">Просмотреть все пожелания</button>
              <!-- Не реализуемо на данном смарт-контракте -->
-            <button id="view-received">Просмотреть полученные</button>
-            <button id="view-added">Просмотреть добавленные</button>
+           // <button id="view-received">Просмотреть полученные</button>
+          //  <button id="view-added">Просмотреть добавленные</button>
         </div>
 
         <!-- Секция результата -->
@@ -48,6 +49,14 @@
         </div>
 
         <!-- Модальные окна -->
+        <div id="modal-all" class="modal hidden">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal-all')">&times;</span>
+                <h2>Все пожелания в контракте</h2>
+                <ul id="all-wishes-list"></ul>
+            </div>
+        </div>
+        
         <div id="modal-received" class="modal hidden">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('modal-received')">&times;</span>
@@ -71,6 +80,7 @@
     </div>
 </body>
 </html>
+
 
 
 
