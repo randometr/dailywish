@@ -5,6 +5,7 @@ let contract = null;
 let userAddress = null;
 let lastActionTime = 0;
 let timerInterval = null;
+let web3Provider = null;
 
 // === Конфигурация ===
 const contractAddress = "0x67e2aD9391DdA5462bff88554c6883522eD825Bd"; // Заменить на реальный адрес
@@ -599,7 +600,7 @@ function shortenAddress(address) {
 // === Инициализация при загрузке ===
 document.addEventListener('DOMContentLoaded', () => {
     // document.getElementById('connect-wallet').addEventListener('click', connectWallet);
-	const web3Provider = getWeb3Provider();
+	web3Provider = getWeb3Provider();
 	document.getElementById('connect-wallet').addEventListener('click', () => {
     if (userAddress) {
         // Если уже подключен, вызываем сброс
@@ -640,6 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
