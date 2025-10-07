@@ -58,20 +58,22 @@
                 <ul id="all-wishes-list"></ul>
             </div>
         </div>
-        
-        <div id="modal-received" class="modal hidden">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modal-received')">&times;</span>
-                <h2>Полученные пожелания</h2>
-                <ul id="received-list"></ul>
-            </div>
-        </div>
 
-        <div id="modal-added" class="modal hidden">
+        <div id="modal-add-wish" class="modal hidden">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('modal-added')">&times;</span>
-                <h2>Добавленные пожелания</h2>
-                <ul id="addedlist"></ul>
+                <span class="close" onclick="closeModal('modal-add-wish')">&times;</span>
+                <h2>Добавить новое пожелание</h2>
+                <form id="add-wish-form">
+                    <div class="form-group">
+                        <label for="wish-author">Автор (необязательно):</label>
+                        <input type="text" id="wish-author" placeholder="Ваше имя">
+                    </div>
+                    <div class="form-group">
+                        <label for="wish-text">Текст пожелания*:</label>
+                        <textarea id="wish-text" placeholder="Введите ваше пожелание (максимум 280 символов)" required></textarea>
+                    </div>
+                        <button type="submit">Отправить</button>
+                </form>
             </div>
         </div>
 
@@ -82,6 +84,7 @@
     </div>
 </body>
 </html>
+
 
 
 
