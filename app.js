@@ -196,11 +196,11 @@ function getWeb3Provider() {
 
 // === Инициализация приложения ===
 async function initApp() {
-    const web3Provider = getWeb3Provider();
-    if (!web3Provider) {
-        alert("Установите Web3-кошелек (MetaMask, OKX и т.д.)!");
-        return;
-    }
+    // const web3Provider = getWeb3Provider();
+    // if (!web3Provider) {
+    //     alert("Установите Web3-кошелек (MetaMask, OKX и т.д.)!");
+    //     return;
+    // }
 
     try {
         // Проверяем, есть ли уже подключенные аккаунты
@@ -215,11 +215,11 @@ async function initApp() {
 
 // === Подключение кошелька ===
 async function connectWallet() {
-    const web3Provider = getWeb3Provider();
-    if (!web3Provider) {
-        alert("Установите Web3-кошелек!");
-        return;
-    }
+    // const web3Provider = getWeb3Provider();
+    // if (!web3Provider) {
+    //     alert("Установите Web3-кошелек!");
+    //     return;
+    // }
 
     try {
         const accounts = await web3Provider.request({ method: 'eth_requestAccounts' });
@@ -233,10 +233,12 @@ async function connectWallet() {
 // === Финальная инициализация после подключения ===
 async function finalizeConnection(address) {
     userAddress = address;
-    document.getElementById('connect-wallet').textContent = `Кошелёк: ${shortenAddress(address)}`;
-    document.getElementById('connect-wallet').disabled = true;
+    // document.getElementById('connect-wallet').textContent = `Кошелёк: ${shortenAddress(address)}`;
+    // document.getElementById('connect-wallet').disabled = true;
+	document.getElementById('connect-wallet').textContent = `Кошелёк: ${shortenAddress(address)} (Отключиться)`;
+	document.getElementById('connect-wallet').disabled = false;
 
-    const web3Provider = getWeb3Provider();
+    // const web3Provider = getWeb3Provider();
     provider = new ethers.BrowserProvider(web3Provider);
     signer = await provider.getSigner();
     contract = new ethers.Contract(contractAddress, contractABI, signer);
@@ -256,7 +258,12 @@ async function checkNetwork() {
         if (!networkCorrect) {
             document.getElementById('network-alert').classList.remove('hidden');
             document.getElementById('actions-section').classList.add('hidden');
-            await suggestNetworkSwitch();
+           	const switched = await suggestNetworkSwitch();
+			if (switched) {
+                // Если переключение прошло успешно, перезапускаем инициализацию
+                await finalizeConnection(userAddress); 
+            }
+            
         } else {
             document.getElementById('network-alert').classList.add('hidden');
             document.getElementById('actions-section').classList.remove('hidden');
@@ -271,6 +278,7 @@ async function checkNetwork() {
 async function suggestNetworkSwitch() {
     try {
         await provider.send('wallet_switchEthereumChain', [{ chainId: baseChainId }]);
+		return true; 
     } catch (switchError) {
         if (switchError.code === 4902) {
             try {
@@ -282,9 +290,15 @@ async function suggestNetworkSwitch() {
                     blockExplorerUrls: ['https://basescan.org']
                 }]);
             } catch (addError) {
-                alert("Добавьте сеть Base вручную.");
-            }
+                console.error('Не удалось добавить сеть:', addError);
+                return false;
+			}
+        } else if (switchError.code === 4001) {
+            // Пользователь отклонил
+            alert("Вы отклонили запрос на смену сети.");
+            return false;
         }
+        return false;
     }
 }
 
@@ -321,6 +335,26 @@ async function updateButtonStates() {
 //		alert('Ошибка получения lastActionTime:', err);
 //	} -->
 		}
+
+// === Сброс состояния приложения ===
+function resetAppState() {
+    // Сброс глобальных переменных
+    provider = null;
+    signer = null;
+    contract = null;
+    userAddress = null;
+    lastActionTime = 0;
+    clearInterval(timerInterval);
+
+    // Сброс UI
+    document.getElementById('connect-wallet').textContent = "Подключить кошелёк";
+    document.getElementById('connect-wallet').disabled = false;
+    document.getElementById('actions-section').classList.add('hidden');
+    document.getElementById('balance-section').classList.add('hidden');
+    document.getElementById('timer-section').classList.add('hidden');
+    document.getElementById('result-section').classList.add('hidden');
+    document.getElementById('network-alert').classList.add('hidden');
+}
 
 // === Запуск таймера ===
 function startTimer(seconds) {
@@ -564,7 +598,32 @@ function shortenAddress(address) {
 
 // === Инициализация при загрузке ===
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('connect-wallet').addEventListener('click', connectWallet);
+    // document.getElementById('connect-wallet').addEventListener('click', connectWallet);
+	const web3Provider = getWeb3Provider();
+	document.getElementById('connect-wallet').addEventListener('click', () => {
+    if (userAddress) {
+        // Если уже подключен, вызываем сброс
+        resetAppState();
+        alert("Состояние сброшено. Для полного отключения от сайта, пожалуйста, сделайте это в настройках вашего кошелька.");
+    } else {
+        // Если не подключен, запрашиваем подключение
+        connectWallet();
+    }
+});
+	if (web3Provider) {
+		web3Provider.on('chainChanged', (chainId) => {
+			 if (userAddress) {
+				 finalizeConnection(userAddress);
+        }
+    });
+		web3Provider.on('accountsChanged', (accounts) => {
+			if (accounts.length > 0) {
+				finalizeConnection(accounts[0]);
+        } else {
+            resetAppState();
+        }
+    });
+}
     document.getElementById('get-wish').addEventListener('click', getRandomWish);
 	document.getElementById('add-wish').addEventListener('click', openAddWishModal);
 	document.getElementById('add-wish-form').addEventListener('submit', handleAddWishSubmit);
@@ -581,6 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
