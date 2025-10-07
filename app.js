@@ -394,7 +394,7 @@ async function getRandomWish() {
 
         lastActionTime = Math.floor(Date.now() / 1000);
         startTimer(24 * 60 * 60);
-		localStorage.setItem("lastActionTime", lastActionTime);
+		//localStorage.setItem("lastActionTime", lastActionTime);
     } catch (error) {
         alert(`Ошибка: ${error.message}`);
     } finally {
@@ -422,6 +422,8 @@ function openAddWishModal() {
 	document.getElementById('add-wish').disabled = true;
     const modal = document.getElementById('modal-add-wish');
     modal.classList.remove('hidden');
+	console.log("Функция openAddWishModal вызвана");
+	console.log("Модальное окно:", modal);
     
     // Очищаем форму
     document.getElementById('wish-author').value = '';
@@ -481,6 +483,8 @@ async function handleAddWishSubmit(event) {
 async function viewAllWishes() {
 	const modal = document.getElementById('modal-all');
 	const list = document.getElementById('all-wishes-list');
+	console.log("Функция viewAllWishes вызвана");
+	console.log("Модальное окно:", modal);
 	list.innerHTML = "<li>Загрузка...</li>";
 	modal.classList.remove('hidden');
 
@@ -653,6 +657,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
