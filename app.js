@@ -423,7 +423,9 @@ async function viewAllWishes() {
 		const allWishesData = await Promise.all(promises);
 		allWishesData.forEach((wishData, i) => {
             // wishData - это массив [author, text, timestamp]
-            const [author, text, timestamp] = wishData;
+            // const [author, text, timestamp] = wishData;
+			const author = wishData[0];
+            const text = wishData[1];
 			const li = document.createElement('li');
 			// Проверяем, что текст пожелания не пустой
             if (text && text.length > 0) {
@@ -514,6 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
