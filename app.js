@@ -395,7 +395,7 @@ async function viewAllWishes() {
 		// 1. Получаем общее количество пожеланий
 		const countBigInt = await contract.getWishesCount();
 		const count = Number(countBigInt);
-		console.log("Общее количество пожеланий:", count);
+		//console.log("Общее количество пожеланий:", count);
 		
 		if (count === 0) {
 			list.innerHTML = "<li>В контракте нет ни одного пожелания.</li>";
@@ -406,16 +406,16 @@ async function viewAllWishes() {
 
 		// 2. В цикле получаем каждое пожелание по ID
 		for (let i = 0; i < count; i++) {
-			console.log("Попытка получить пожелание с ID:", i);
+			//console.log("Попытка получить пожелание с ID:", i);
 			// Предполагаем, что getWish возвращает (author, text, timestamp)
-			try {
+			//try {
 				const [author, text, timestamp] = await contract.getWish(i);
 			
 			const li = document.createElement('li');
 			li.textContent = `[ID: ${i}] ${text} — ${author}`;
 			list.appendChild(li);
-			} catch (error) {
-				console.error("Ошибка при ID:", i, error);
+			//} catch (error) {
+			//	console.error("Ошибка при ID:", i, error);
 			}
 		}
 	} catch (error) {
@@ -496,6 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
