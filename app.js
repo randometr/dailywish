@@ -368,19 +368,77 @@ async function getRandomWish() {
 }
 
 // === Добавление пожелания ===
-async function addWish() {
+// async function addWish() {
+//     try {
+//         document.getElementById('add-wish').disabled = true;
+//         const tx = await contract.addWish("Аноним", "Тестовое пожелание");
+//         await tx.wait();
+//         alert("Пожелание добавлено!");
+//         lastActionTime = Math.floor(Date.now() / 1000);
+//         startTimer(24 * 60 * 60);
+// 		localStorage.setItem("lastActionTime", lastActionTime);
+//     } catch (error) {
+//         alert(`Ошибка: ${error.message}`);
+//     } finally {
+//         document.getElementById('add-wish').disabled = false;
+//     }
+// }
+function openAddWishModal() {
+    const modal = document.getElementById('modal-add-wish');
+    modal.classList.remove('hidden');
+    
+    // Очищаем форму
+    document.getElementById('wish-author').value = '';
+    document.getElementById('wish-text').value = '';
+    document.getElementById('char-count').textContent = '0/280 символов';
+}
+
+async function handleAddWishSubmit(event) {
+    event.preventDefault();
+    
+    const author = document.getElementById('wish-author').value;
+    const text = document.getElementById('wish-text').value;
+    
+    // Валидация
+    if (!text.trim()) {
+        alert("Текст пожелания не может быть пустым!");
+        return;
+    }
+    
+    if (text.length > 280) {
+        alert("Текст слишком длинный! Максимум 280 символов.");
+        return;
+    }
+    
     try {
-        document.getElementById('add-wish').disabled = true;
-        const tx = await contract.addWish("Аноним", "Тестовое пожелание");
-        await tx.wait();
-        alert("Пожелание добавлено!");
-        lastActionTime = Math.floor(Date.now() / 1000);
+        // Показываем индикатор загрузки
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Отправка...";
+        
+        // Вызываем контракт
+        const tx = await contract.addWish(author || "Аноним", text);
+        const receipt = await tx.wait();
+        
+        // Обновляем состояние
+        const block = await provider.getBlock(receipt.blockNumber);
+        lastActionTime = block.timestamp;
         startTimer(24 * 60 * 60);
-		localStorage.setItem("lastActionTime", lastActionTime);
+        
+        // Закрываем модальное окно
+        closeModal('modal-add-wish');
+        alert("Пожелание успешно добавлено!");
+        
     } catch (error) {
+        console.error("Ошибка добавления:", error);
         alert(`Ошибка: ${error.message}`);
     } finally {
-        document.getElementById('add-wish').disabled = false;
+        // Восстанавливаем кнопку
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Отправить";
+        }
     }
 }
 
@@ -508,14 +566,22 @@ function shortenAddress(address) {
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('connect-wallet').addEventListener('click', connectWallet);
     document.getElementById('get-wish').addEventListener('click', getRandomWish);
-    document.getElementById('add-wish').addEventListener('click', addWish);
-	document.getElementById('view-all').addEventListener('click', viewAllWishes);
-    //document.getElementById('view-received').addEventListener('click', viewReceivedWishes);
+	document.getElementById('add-wish').addEventListener('click', openAddWishModal);
+	document.getElementById('add-wish-form').addEventListener('submit', handleAddWishSubmit);
+    document.getElementById('view-all').addEventListener('click', viewAllWishes);
+	document.getElementById('wish-text').addEventListener('input', function() {
+        const count = this.value.length;
+        document.getElementById('char-count').textContent = `${count}/280 символов`;
+        document.getElementById('char-count').style.color = count > 280 ? 'red' : 'inherit';
+    });
+    // document.getElementById('add-wish').addEventListener('click', addWish);
+	//document.getElementById('view-received').addEventListener('click', viewReceivedWishes);
     //document.getElementById('view-added').addEventListener('click', viewAddedWishes);
 	
 
     initApp();
 });
+
 
 
 
