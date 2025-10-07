@@ -130,4 +130,10 @@ button[type="submit"]:disabled {
     cursor: not-allowed;
 }
 
+#char-count {
+    font-size: 0.8em;
+    text-align: right;
+    margin-top: 5px;
+}
+
 
