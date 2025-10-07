@@ -384,6 +384,39 @@ async function addWish() {
     }
 }
 
+// === Просмотр всех пожеланий в контракте ===
+async function viewAllWishes() {
+	const modal = document.getElementById('modal-all');
+	const list = document.getElementById('all-wishes-list');
+	list.innerHTML = "<li>Загрузка...</li>";
+	modal.classList.remove('hidden');
+
+	try {
+		// 1. Получаем общее количество пожеланий
+		const count = await contract.getWishesCount();
+		
+		if (count === 0) {
+			list.innerHTML = "<li>В контракте нет ни одного пожелания.</li>";
+			return;
+		}
+		
+		list.innerHTML = ""; // Очищаем "Загрузка..."
+
+		// 2. В цикле получаем каждое пожелание по ID
+		for (let i = 0; i < count; i++) {
+			// Предполагаем, что getWish возвращает (author, text, timestamp)
+			const [author, text, timestamp] = await contract.getWish(i);
+			
+			const li = document.createElement('li');
+			li.textContent = `[ID: ${i}] ${text} — ${author}`;
+			list.appendChild(li);
+		}
+	} catch (error) {
+		console.error("Ошибка загрузки всех пожеланий:", error);
+		list.innerHTML = "<li>Ошибка загрузки данных из контракта. Проверьте консоль.</li>";
+	}
+}
+
 // === Просмотр полученных пожеланий ===
 async function viewReceivedWishes() {
     const modal = document.getElementById('modal-received');
@@ -451,9 +484,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('add-wish').addEventListener('click', addWish);
     document.getElementById('view-received').addEventListener('click', viewReceivedWishes);
     document.getElementById('view-added').addEventListener('click', viewAddedWishes);
+	document.getElementById('view-all').addEventListener('click', viewAllWishes);
 
     initApp();
 });
+
 
 
 
