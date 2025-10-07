@@ -386,10 +386,21 @@ async function getRandomWish() {
         document.getElementById('add-wish').disabled = true;
 
         const wishTextFromContract = await contract.getRandomWish();
-        const wish = { text: wishTextFromContract, author: "Аноним" };
+        // const wish = { text: wishTextFromContract, author: "Аноним" };
+		const countBigInt = await contract.getWishesCount();
+        const count = Number(countBigInt);
+		let author = "Аноним";
 
-        document.querySelector('.wish-text').textContent = wish.text;
-        document.querySelector('.wish-author').textContent = wish.author ? `- ${wish.author}` : "";
+		for (let i = 0; i < count; i++) {
+            const [a, t, ts] = await contract.getWish(i);
+            if (t === wishTextFromContract) {
+                author = a;
+                break;
+            }
+        }
+
+        document.querySelector('.wish-text').textContent = wishTextFromContract;
+        document.querySelector('.wish-author').textContent = `- ${author}`;
         document.getElementById('result-section').classList.remove('hidden');
 
         lastActionTime = Math.floor(Date.now() / 1000);
@@ -399,6 +410,7 @@ async function getRandomWish() {
         alert(`Ошибка: ${error.message}`);
     } finally {
         document.getElementById('get-wish').disabled = false;
+		document.getElementById('add-wish').disabled = false;
     }
 }
 
@@ -656,6 +668,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
