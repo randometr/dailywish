@@ -5,7 +5,7 @@ let contract = null;
 let userAddress = null;
 let lastActionTime = 0;
 let timerInterval = null;
-let web3Provider = null;
+// let web3Provider = null;
 
 // === Конфигурация ===
 const contractAddress = "0x67e2aD9391DdA5462bff88554c6883522eD825Bd"; // Заменить на реальный адрес
@@ -197,7 +197,7 @@ function getWeb3Provider() {
 
 // === Инициализация приложения ===
 async function initApp() {
-    // const web3Provider = getWeb3Provider();
+    const web3Provider = getWeb3Provider();
     // if (!web3Provider) {
     //     alert("Установите Web3-кошелек (MetaMask, OKX и т.д.)!");
     //     return;
@@ -216,7 +216,7 @@ async function initApp() {
 
 // === Подключение кошелька ===
 async function connectWallet() {
-    // const web3Provider = getWeb3Provider();
+    const web3Provider = getWeb3Provider();
     // if (!web3Provider) {
     //     alert("Установите Web3-кошелек!");
     //     return;
@@ -239,7 +239,7 @@ async function finalizeConnection(address) {
 	document.getElementById('connect-wallet').textContent = `Кошелёк: ${shortenAddress(address)} (Отключиться)`;
 	document.getElementById('connect-wallet').disabled = false;
 
-    // const web3Provider = getWeb3Provider();
+    const web3Provider = getWeb3Provider();
     provider = new ethers.BrowserProvider(web3Provider);
     signer = await provider.getSigner();
     contract = new ethers.Contract(contractAddress, contractABI, signer);
@@ -600,7 +600,7 @@ function shortenAddress(address) {
 // === Инициализация при загрузке ===
 document.addEventListener('DOMContentLoaded', () => {
     // document.getElementById('connect-wallet').addEventListener('click', connectWallet);
-	web3Provider = getWeb3Provider();
+	const web3Provider = getWeb3Provider();
 	document.getElementById('connect-wallet').addEventListener('click', () => {
     if (userAddress) {
         // Если уже подключен, вызываем сброс
@@ -641,6 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
