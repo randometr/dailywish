@@ -641,10 +641,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // document.getElementById('add-wish').addEventListener('click', addWish);
 	//document.getElementById('view-received').addEventListener('click', viewReceivedWishes);
     //document.getElementById('view-added').addEventListener('click', viewAddedWishes);
-	
+window.addEventListener('click', function(event) {
+const modals = document.querySelectorAll('.modal');
+modals.forEach(modal => {
+	if (event.target === modal) {
+		modal.classList.add('hidden');
+	}
+});
+});
 
     initApp();
 });
+
 
 
 
