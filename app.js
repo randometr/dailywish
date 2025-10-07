@@ -419,7 +419,6 @@ async function getRandomWish() {
 //     }
 // }
 function openAddWishModal() {
-	document.getElementById('add-wish').disabled = true;
     const modal = document.getElementById('modal-add-wish');
     modal.classList.remove('hidden');
 	console.log("Функция openAddWishModal вызвана");
@@ -657,6 +656,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
