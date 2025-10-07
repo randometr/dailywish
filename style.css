@@ -63,7 +63,7 @@ button:disabled {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
@@ -135,5 +135,6 @@ button[type="submit"]:disabled {
     text-align: right;
     margin-top: 5px;
 }
+
 
 
