@@ -482,12 +482,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('connect-wallet').addEventListener('click', connectWallet);
     document.getElementById('get-wish').addEventListener('click', getRandomWish);
     document.getElementById('add-wish').addEventListener('click', addWish);
-    document.getElementById('view-received').addEventListener('click', viewReceivedWishes);
-    document.getElementById('view-added').addEventListener('click', viewAddedWishes);
 	document.getElementById('view-all').addEventListener('click', viewAllWishes);
+    //document.getElementById('view-received').addEventListener('click', viewReceivedWishes);
+    //document.getElementById('view-added').addEventListener('click', viewAddedWishes);
+	
 
     initApp();
 });
+
 
 
 
