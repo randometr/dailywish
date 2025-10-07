@@ -425,7 +425,6 @@ function openAddWishModal() {
     // Очищаем форму
     document.getElementById('wish-author').value = '';
     document.getElementById('wish-text').value = '';
-    document.getElementById('char-count').textContent = '0/280 символов';
 }
 
 async function handleAddWishSubmit(event) {
@@ -537,6 +536,11 @@ async function viewAllWishes() {
 	}
 }
 
+// === Закрытие модального окна ===
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+
 // === Просмотр полученных пожеланий ===
 async function viewReceivedWishes() {
     const modal = document.getElementById('modal-received');
@@ -641,6 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
