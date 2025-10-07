@@ -414,9 +414,9 @@ async function viewAllWishes() {
 			
 			//const [author, text, timestamp] = await contract.getWish(i);
 		
-			const li = document.createElement('li');
-			li.textContent = `[ID: ${i}] ${text} — ${author}`;
-			list.appendChild(li);
+			//const li = document.createElement('li');
+			//li.textContent = `[ID: ${i}] ${text} — ${author}`;
+			//list.appendChild(li);
 			//} catch (error) {
 			//	console.error("Ошибка при ID:", i, error);
 			}
@@ -516,6 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
