@@ -75,8 +75,39 @@
                     </div>
                         <button type="submit">Отправить</button>
                 </form>
+                    <div class="gas-notice">
+                        <p>⚠️ За добавление пожелания взимается комиссия сети (gas).</p>
+                        <p>Текущая комиссия: <span id="gas-estimate">...</span> ETH</p>
+                    </div>
             </div>
         </div>
+        
+        <div id="modal-rules" class="modal hidden">
+    <div class="modal-content">
+        <h2>Правила использования DailyWish</h2>
+        
+        <div class="rules-content">
+            <p>Добро пожаловать в DailyWish! Пожалуйста, ознакомьтесь с правилами:</p>
+            
+            <ol>
+                <li>Вы можете выбрать <strong>одно действие в день</strong>:
+                    <ul>
+                        <li>✅ Получить случайное пожелание</li>
+                        <li>✅ Добавить новое пожелание</li>
+                    </ul>
+                </li>
+                <li>После получения пожелания вы можете <strong>поделиться им в Twitter (X)</strong> с помощью кнопки "Поделиться"</li>
+                <li>Приложение работает на блокчейне <strong>Base</strong> (L2 Ethereum)</li>
+                <li>За каждое действие (кроме просмотра всех пожеланий) взимается комиссия сети (gas) в <strong>ETH</strong></li>
+                <li>Все пожелания хранятся в смарт-контракте и доступны для просмотра</li>
+            </ol>
+            
+            <p>Нажимая "Я согласен", вы подтверждаете, что понимаете правила и готовы оплатить комиссию сети.</p>
+        </div>
+        
+        <button id="accept-rules">Я согласен</button>
+    </div>
+</div>
 
         <!-- Подключение библиотек -->
        <!-- <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.min.js"></script> -->
@@ -84,7 +115,11 @@
         <script src="app.js"></script>
     </div>
 </body>
+    <footer>
+        <button id="show-rules">Показать правила</button>
+    </footer>
 </html>
+
 
 
 
