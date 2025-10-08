@@ -398,10 +398,8 @@ async function getRandomWish() {
     try {
         document.getElementById('get-wish').disabled = true;
         document.getElementById('add-wish').disabled = true;
-		console.log(ethers.version);
-		console.log("contract:", contract);
-		
-        const wishTextFromContract = await contract.callStatic.getRandomWish();
+	
+        const wishTextFromContract = await contract.getRandomWish.staticCall();
 		// const wishTextFromContract = await contract.getRandomWish();
         const wish = { text: wishTextFromContract, author: "DailyWisher" };
 		const countBigInt = await contract.getWishesCount();
@@ -745,6 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
