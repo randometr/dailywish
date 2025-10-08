@@ -460,11 +460,16 @@ async function handleAddWishSubmit(event) {
     
     const author = document.getElementById('wish-author').value;
     const text = document.getElementById('wish-text').value;
-    
+	
     // Валидация
     if (!text.trim()) {
         alert("Текст пожелания не может быть пустым!");
         return;
+    }
+
+	if (containsBadWords(text)) {
+	alert("Текст содержит недопустимые слова. Пожалуйста, измените его.");
+	return;
     }
     
     if (text.length > 280) {
@@ -620,7 +625,16 @@ async function estimateAddWishGas() {
     }
 }
 
-
+// === Функция проверки на плохие слова ===
+// function containsBadWords(text) {
+//     const badWords = [
+//         'мат1', 'мат2', 'мат3', 'оскорбление1', 'оскорбление2', 
+//         'плохоеслово1', 'плохоеслово2', 'ненормативнаялексика'
+//     ];
+    
+//     const lowerText = text.toLowerCase();
+//     return badWords.some(word => lowerText.includes(word));
+// }
 
 // === Инициализация при загрузке ===
 document.addEventListener('DOMContentLoaded', () => {
@@ -678,6 +692,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
