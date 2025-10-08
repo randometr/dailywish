@@ -408,7 +408,7 @@ async function getRandomWish() {
 
 		for (let i = 0; i < count; i++) {
             const [a, t, ts] = await contract.getWish(i);
-            if (t === wishTextString) {
+            if (t === wishTextFromContract) {
                 author = a;
                 break;
             }
@@ -743,6 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
