@@ -323,9 +323,8 @@ async function updateBalance() {
 // === Обновление состояния кнопок ===
 async function updateButtonStates() {
 	if (!contract || !userAddress) return;
-		const lastActionTime = 0;
-		// const lastAction = await contract.lastActionTime(userAddress);
-        // lastActionTime = Number(lastAction); // timestamp из смарт-контракта
+		const lastAction = await contract.lastActionTime(userAddress);
+        lastActionTime = Number(lastAction); // timestamp из смарт-контракта
         const currentTime = Math.floor(Date.now() / 1000);
         const timeSinceLastAction = currentTime - lastActionTime;
         const cooldownPeriod = 24 * 60 * 60;
@@ -743,6 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
