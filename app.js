@@ -625,6 +625,31 @@ async function estimateAddWishGas() {
     }
 }
 
+// === Функция для создания ссылки на X (Twitter) ===
+function shareOnX() {
+    // 1. Получаем текущее пожелание и автора
+    const wishText = document.querySelector('.wish-text').textContent;
+    const wishAuthor = document.querySelector('.wish-author').textContent;
+    
+    // 2. Формируем текст поста
+    const postText = `Моё пожелание на сегодня: "${wishText}" by ${wishAuthor}`;
+    
+    // 3. Определяем хэштеги и ссылку на ваш сайт
+    const hashtags = "DailyWish,Web3,Base,EVM,Crypto"; // Ваши хэштеги
+    const url = "https://randometr.github.io/dailywish/"; // Замените на адрес вашего GitHub Pages сайта!
+    
+    // 4. Кодируем текст для URL
+    const encodedText = encodeURIComponent(postText);
+    const encodedHashtags = encodeURIComponent(hashtags);
+    const encodedUrl = encodeURIComponent(url);
+    
+    // 5. Формируем полную ссылку для X (Twitter)
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedText}&hashtags=${encodedHashtags}&url=${encodedUrl}`;
+    
+    // 6. Открываем новое окно
+    window.open(twitterUrl, '_blank');
+}
+
 // === Функция проверки на плохие слова ===
 // function containsBadWords(text) {
 //     const badWords = [
@@ -672,6 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('get-wish').addEventListener('click', getRandomWish);
 	document.getElementById('add-wish').addEventListener('click', openAddWishModal);
 	document.getElementById('add-wish-form').addEventListener('submit', handleAddWishSubmit);
+	document.getElementById('share-wish').addEventListener('click', shareOnX);
     document.getElementById('view-all').addEventListener('click', viewAllWishes);
 	document.getElementById('wish-text').addEventListener('input', function() {
         const count = this.value.length;
@@ -692,6 +718,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
