@@ -178,5 +178,23 @@ button[type="submit"]:disabled {
     font-size: 0.9em;
 }
 
+/* Стили для кнопки "Поделиться в X" */
+.share-button {
+    background-color: #1DA1F2; /* Цвет X/Twitter */
+    color: white;
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.share-button:hover {
+    background-color: #0c85d0;
+}
+
+
 
 
