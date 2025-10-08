@@ -472,10 +472,10 @@ async function handleAddWishSubmit(event) {
         return;
     }
 
-	if (containsBadWords(text)) {
-	alert("Текст содержит недопустимые слова. Пожалуйста, измените его.");
-	return;
-    }
+	// if (containsBadWords(text)) {
+	// alert("Текст содержит недопустимые слова. Пожалуйста, измените его.");
+	// return;
+ //    }
     
     if (text.length > 280) {
         alert("Текст слишком длинный! Максимум 280 символов.");
@@ -741,6 +741,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
