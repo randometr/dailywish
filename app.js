@@ -585,6 +585,8 @@ function shortenAddress(address) {
 function showRulesModal() {
     // Проверяем, не принимал ли пользователь правила ранее
     const hasAccepted = localStorage.getItem('rulesAccepted');
+	console.log("Функция showRulesModal вызвана");
+	console.log("hasAccepted:", hasAccepted);
     
     if (!hasAccepted) {
         const modal = document.getElementById('modal-rules');
@@ -676,6 +678,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
