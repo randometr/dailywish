@@ -735,4 +735,3 @@ modals.forEach(modal => {
 
     initApp();
 });
-
