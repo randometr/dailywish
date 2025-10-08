@@ -250,7 +250,9 @@ async function finalizeConnection(address) {
     await updateBalance();
     await updateButtonStates();
     document.getElementById('actions-section').classList.remove('hidden');
-	showRulesModal();
+	if (!rulesAccepted) {
+		showRulesModal();
+	}
 }
 
 // === Проверка сети ===
@@ -736,4 +738,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
