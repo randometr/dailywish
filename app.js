@@ -399,9 +399,7 @@ async function getRandomWish() {
         document.getElementById('get-wish').disabled = true;
         document.getElementById('add-wish').disabled = true;
 	
-        const wishTextFromContract = await contract.getRandomWish.staticCall();
-		// const wishTextFromContract = await contract.getRandomWish();
-        const wish = { text: wishTextFromContract, author: "DailyWisher" };
+        const wishTextFromContract = await contract.getRandomWish.staticCall(); //Вызов без изменения контракта!
 		const countBigInt = await contract.getWishesCount();
         const count = Number(countBigInt);
 		let author = "DailyWisher";
@@ -414,8 +412,8 @@ async function getRandomWish() {
             }
         }
 
-        document.querySelector('.wish-text').textContent = wish.text;
-        document.querySelector('.wish-author').textContent = `- ${wish.author}`;
+        document.querySelector('.wish-text').textContent = wishTextFromContract;
+        document.querySelector('.wish-author').textContent = `© ${author}`;
         document.getElementById('result-section').classList.remove('hidden');
 
         lastActionTime = Math.floor(Date.now() / 1000);
@@ -743,6 +741,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
