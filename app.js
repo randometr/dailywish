@@ -5,6 +5,8 @@ let contract = null;
 let userAddress = null;
 let lastActionTime = 0;
 let timerInterval = null;
+let rulesAccepted = false;
+
 // let web3Provider = null;
 
 // === Конфигурация ===
@@ -248,6 +250,7 @@ async function finalizeConnection(address) {
     await updateBalance();
     await updateButtonStates();
     document.getElementById('actions-section').classList.remove('hidden');
+	showRulesModal();
 }
 
 // === Проверка сети ===
@@ -381,6 +384,11 @@ function startTimer(seconds) {
 
 // === Получение пожелания ===
 async function getRandomWish() {
+	 if (!rulesAccepted) {
+        alert("Пожалуйста, ознакомьтесь с правилами и подтвердите согласие");
+        showRulesModal();
+        return;
+    }
     try {
         document.getElementById('get-wish').disabled = true;
         document.getElementById('add-wish').disabled = true;
@@ -431,6 +439,12 @@ async function getRandomWish() {
 //     }
 // }
 function openAddWishModal() {
+	if (!rulesAccepted) {
+	alert("Пожалуйста, ознакомьтесь с правилами и подтвердите согласие");
+	showRulesModal();
+	return;
+}
+	estimateAddWishGas();
     const modal = document.getElementById('modal-add-wish');
     modal.classList.remove('hidden');
 	console.log("Функция openAddWishModal вызвана");
@@ -557,56 +571,6 @@ function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
 }
 
-// === Просмотр полученных пожеланий ===
-async function viewReceivedWishes() {
-    const modal = document.getElementById('modal-received');
-    const list = document.getElementById('receivedlist');
-    list.innerHTML = "<li>Загрузка...</li>";
-    modal.classList.remove('hidden');
-
-    try {
-        const count = await contract.getWishesCount();
-        if (count === 0) {
-            list.innerHTML = "<li>Нет полученных пожеланий</li>";
-            return;
-        }
-
-        for (let i = 0; i < count; i++) {
-            const [author, text] = await contract.getWish(i);
-            const li = document.createElement('li');
-            li.textContent = `${text} - ${author}`;
-            list.appendChild(li);
-        }
-    } catch (error) {
-        list.innerHTML = "<li>Ошибка загрузки</li>";
-    }
-}
-
-// === Просмотр добавленных пожеланий ===
-async function viewAddedWishes() {
-    const modal = document.getElementById('modal-added');
-    const list = document.getElementById('addedlist');
-    list.innerHTML = "<li>Загрузка...</li>";
-    modal.classList.remove('hidden');
-
-    try {
-        const count = await contract.getWishesCount();
-        if (count === 0) {
-            list.innerHTML = "<li>Вы еще не добавляли пожеланий</li>";
-            return;
-        }
-
-        for (let i = 0; i < count; i++) {
-            const [author, text] = await contract.getWish(i);
-            const li = document.createElement('li');
-            li.textContent = `${text} - ${author}`;
-            list.appendChild(li);
-        }
-    } catch (error) {
-        list.innerHTML = "<li>Ошибка загрузки</li>";
-    }
-}
-
 // === Закрытие модального окна ===
 function closeModal(id) {
     document.getElementById(id).classList.add('hidden');
@@ -617,9 +581,50 @@ function shortenAddress(address) {
     return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
 }
 
+// === Функция показа правил ===
+function showRulesModal() {
+    // Проверяем, не принимал ли пользователь правила ранее
+    const hasAccepted = localStorage.getItem('rulesAccepted');
+    
+    if (!hasAccepted) {
+        const modal = document.getElementById('modal-rules');
+        modal.classList.remove('hidden');
+    } else {
+        rulesAccepted = true;
+    }
+}
+
+// === Функция скрытия правил и сохранения согласия ===
+function acceptRules() {
+    const modal = document.getElementById('modal-rules');
+    modal.classList.add('hidden');
+    
+    // Сохраняем согласие в localStorage
+    localStorage.setItem('rulesAccepted', 'true');
+    rulesAccepted = true;
+}
+
+// === Функция оценки комиссии ===
+async function estimateAddWishGas() {
+    try {
+        const gasEstimate = await contract.addWish.estimateGas("Аноним", "Пример текста");
+        const gasPrice = await provider.getFeeData();
+        const gasCost = gasEstimate * gasPrice.gasPrice;
+        
+        document.getElementById('gas-estimate').textContent = ethers.formatEther(gasCost);
+    } catch (error) {
+        console.error("Ошибка оценки комиссии:", error);
+        document.getElementById('gas-estimate').textContent = "неизвестно";
+    }
+}
+
+
+
 // === Инициализация при загрузке ===
 document.addEventListener('DOMContentLoaded', () => {
     // document.getElementById('connect-wallet').addEventListener('click', connectWallet);
+	document.getElementById('accept-rules').addEventListener('click', acceptRules);
+	document.getElementById('show-rules').addEventListener('click', showRulesModal);
 	const web3Provider = getWeb3Provider();
 	document.getElementById('connect-wallet').addEventListener('click', () => {
     if (userAddress) {
@@ -636,6 +641,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			 if (userAddress) {
 				 finalizeConnection(userAddress);
         }
+			if (document.getElementById('modal-add-wish').classList.contains('hidden')) {
+        estimateAddWishGas();
+    }
     });
 		web3Provider.on('accountsChanged', (accounts) => {
 			if (accounts.length > 0) {
@@ -668,6 +676,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
