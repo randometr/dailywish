@@ -592,12 +592,17 @@ function showRulesModal() {
     const hasAccepted = localStorage.getItem('rulesAccepted');
 	console.log("Функция showRulesModal вызвана");
 	console.log("hasAccepted:", hasAccepted);
-    
-    if (!hasAccepted) {
-        const modal = document.getElementById('modal-rules');
-        modal.classList.remove('hidden');
+
+	const modal = document.getElementById('modal-rules');
+	modal.classList.remove('hidden');
+
+	const acceptButton = document.getElementById('accept-rules');
+    acceptButton.classList.remove('hidden');
+
+	if (rulesAccepted) {
+        acceptButton.textContent = "Закрыть";
     } else {
-        rulesAccepted = true;
+        acceptButton.textContent = "Я согласен";
     }
 }
 
@@ -607,8 +612,9 @@ function acceptRules() {
     modal.classList.add('hidden');
     
     // Сохраняем согласие в localStorage
-    localStorage.setItem('rulesAccepted', 'true');
-    rulesAccepted = true;
+	if (!rulesAccepted) {
+	    localStorage.setItem('rulesAccepted', 'true');
+	    rulesAccepted = true;
 }
 
 // === Функция оценки комиссии ===
@@ -664,8 +670,19 @@ function shareOnX() {
 // === Инициализация при загрузке ===
 document.addEventListener('DOMContentLoaded', () => {
     // document.getElementById('connect-wallet').addEventListener('click', connectWallet);
-	document.getElementById('accept-rules').addEventListener('click', acceptRules);
-	document.getElementById('show-rules').addEventListener('click', showRulesModal);
+	const showRulesBtn = document.getElementById('show-rules');
+	if (showRulesBtn) {
+        showRulesBtn.addEventListener('click', showRulesModal);
+    }
+	document.getElementById('accept-rules').addEventListener('click', () => {
+	if (rulesAccepted) {
+		// Если правила уже приняты - просто закрываем окно
+		closeModal('modal-rules');
+	} else {
+		// Если еще не приняты - сохраняем согласие
+		acceptRules();
+	}
+});
 	const web3Provider = getWeb3Provider();
 	document.getElementById('connect-wallet').addEventListener('click', () => {
     if (userAddress) {
@@ -718,6 +735,7 @@ modals.forEach(modal => {
 
     initApp();
 });
+
 
 
 
