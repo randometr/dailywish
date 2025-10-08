@@ -399,6 +399,7 @@ async function getRandomWish() {
         document.getElementById('get-wish').disabled = true;
         document.getElementById('add-wish').disabled = true;
 		console.log("contract:", contract);
+		console.log(ethers.version);
         const wishTextFromContract = await contract.callStatic.getRandomWish();
 		// const wishTextFromContract = await contract.getRandomWish();
         const wish = { text: wishTextFromContract, author: "DailyWisher" };
@@ -743,6 +744,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
