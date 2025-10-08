@@ -199,6 +199,10 @@ function getWeb3Provider() {
 
 // === Инициализация приложения ===
 async function initApp() {
+	const hasAccepted = localStorage.getItem('rulesAccepted');
+    if (hasAccepted === 'true') {
+        rulesAccepted = true;
+    }
     const web3Provider = getWeb3Provider();
     // if (!web3Provider) {
     //     alert("Установите Web3-кошелек (MetaMask, OKX и т.д.)!");
@@ -738,5 +742,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
