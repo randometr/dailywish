@@ -402,8 +402,8 @@ async function getRandomWish() {
 
         // const wishTextFromContract = await contract.getRandomWish();
 		// const receipt = await wishTextFromContract.wait();
-		const receipt = "{"_type":"TransactionReceipt","accessList":[],"blockNumber":36579302,"blockHash":"0xc2ecfb9bbae86858b1ac10bdaed0f568b6db28423ebd7f53120cc5d1384625ed","chainId":"8453","data":"0xf2ddca0f","from":"0x3A4bbf9698a021b6A0466Bf4dcDEeed45BC92044","gasLimit":"83083","gasPrice":"8160599","hash":"0x51e82d4dd96024aaedcba5068031c9339a9152abd458cc72f1e730e8a360c5b8","maxFeePerGas":"9800355","maxPriorityFeePerGas":"257114","nonce":0,"signature":{"_type":"signature","networkV":null,"r":"0x25c167971e1ba1337df1dd77b3cc9d27a85d7844a60df205c7bd9335c243cc4c","s":"0x4e9a60087887f502956df851c960d33926299019f52951a6b3a7f7d522eba7c0","v":27},"to":"0x67e2aD9391DdA5462bff88554c6883522eD825Bd","type":2,"value":"0"}"
-		 const eventLog = receipt.logs.find(log => 
+		const receipt = `{"_type":"TransactionReceipt","accessList":[],"blockNumber":36579302,"blockHash":"0xc2ecfb9bbae86858b1ac10bdaed0f568b6db28423ebd7f53120cc5d1384625ed","chainId":"8453","data":"0xf2ddca0f","from":"0x3A4bbf9698a021b6A0466Bf4dcDEeed45BC92044","gasLimit":"83083","gasPrice":"8160599","hash":"0x51e82d4dd96024aaedcba5068031c9339a9152abd458cc72f1e730e8a360c5b8","maxFeePerGas":"9800355","maxPriorityFeePerGas":"257114","nonce":0,"signature":{"_type":"signature","networkV":null,"r":"0x25c167971e1ba1337df1dd77b3cc9d27a85d7844a60df205c7bd9335c243cc4c","s":"0x4e9a60087887f502956df851c960d33926299019f52951a6b3a7f7d522eba7c0","v":27},"to":"0x67e2aD9391DdA5462bff88554c6883522eD825Bd","type":2,"value":"0"}`;
+	 	const eventLog = receipt.logs.find(log => 
             log.address.toLowerCase() === contractAddress.toLowerCase());
 		if (!eventLog) throw new Error("Событие не найдено");
 		const parsedLog = contract.interface.parseLog(eventLog);
@@ -753,6 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initApp();
 });
+
 
 
 
