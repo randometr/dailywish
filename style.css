@@ -156,6 +156,8 @@ button[type="submit"]:disabled {
 
 .rules-content li {
     margin-bottom: 10px;
+    list-style-type: none;
+    padding-left: 0;      
 }
 
 #accept-rules {
@@ -194,6 +196,7 @@ button[type="submit"]:disabled {
 .share-button:hover {
     background-color: #0c85d0;
 }
+
 
 
 
